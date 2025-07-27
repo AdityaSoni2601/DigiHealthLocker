@@ -13,7 +13,19 @@
     <string name="continue_with_google">Continue with Google</string>
     <string name="app_slogan">Your Health. Your Records. Anytime. Anywhere.</string>
     <string name="welcome_message">Welcome to DigiHealthLocker</string>
-    <string name="login">Login</string>
+    <string name="login">Sign in</string>
     <string name="or">OR</string>
-    <string name="create_account">Create Account</string>
+    <string name="create_account">Sign UP</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="new_here">New here?</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="welcome_to_digihealthlocker">Welcome to DigiHealthLocker!</string>
+    <string name="app_slogan_2">Access and manage your health records with ease.</string>
+    <string name="background_image">Background image</string>
+    <string name="sing_in_hint_message_1">Enter Email or Phone Number</string>
+    <string name="sing_in_hint_message_2">Enter Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="new_to_digihealthlocker">New to DigiHealthLocker?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="your_brand_primary_text_color">#FFFFFF</color> <color name="your_brand_secondary_text_color">#E0E0E0</color>
     <color name="your_splash_background_color">#2196F3</color> <color name="your_brand_accent">#FFC107</color>
