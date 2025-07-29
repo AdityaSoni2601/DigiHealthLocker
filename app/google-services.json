@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "256573400795",
+    "project_id": "digihealthlocker",
+    "storage_bucket": "digihealthlocker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256573400795:android:46f809a8d76b74a7080efe",
+        "android_client_info": {
+          "package_name": "com.digihealthlocker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUI9mkXDrZa15ufoInrceYZ-JqVRHDrk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
