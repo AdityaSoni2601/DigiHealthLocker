@@ -5,8 +5,7 @@
     android:id="@+id/register_user_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.digihealthlocker.userregistration.RegisterUserActivity"
-    >
+    tools:context=".RegisterUserActivity">
 
     <ImageView
         android:id="@+id/backgroundImage"
@@ -172,6 +171,7 @@
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:inputType="text"
+                    android:isCredential="true"
                     android:imeOptions="actionNext"
                     />
 
@@ -200,6 +200,7 @@
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:inputType="textPassword"
+                    android:isCredential="true"
                     android:imeOptions="actionNext"
                     />
 
@@ -228,6 +229,7 @@
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:inputType="textPassword"
+                    android:isCredential="true"
                     android:imeOptions="actionDone"
                     />
 

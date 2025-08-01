@@ -50,7 +50,10 @@ dependencies {
     implementation(libs.annotation)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
-
+    implementation(libs.credentials.v120alpha02)
+    implementation(libs.credentials.play.services.auth.v120alpha02)
+    implementation(libs.biometric)
+    implementation(libs.security.crypto)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
