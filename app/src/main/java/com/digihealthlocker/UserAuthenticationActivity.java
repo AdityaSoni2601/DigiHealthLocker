@@ -4,6 +4,7 @@ import android.content.Intent;
 import androidx.credentials.CredentialManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,9 +15,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.digihealthlocker.userregistration.RegisterUserActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class UserAuthenticationActivity extends AppCompatActivity {
 
@@ -68,6 +69,11 @@ public class UserAuthenticationActivity extends AppCompatActivity {
 
 //        MaterialButton passkeyButton = findViewById(R.id.signInWithPasskeyBtn);
 //        passkeyButton.setOnClickListener(v -> signInWithPasskey());
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            Log.i("onCreate", "currentUser.getDisplayName(): " + currentUser.getDisplayName());
+        }
 
         MaterialButton signUpButton = findViewById(R.id.signUpBtn);
         signUpButton.setOnClickListener(v -> {

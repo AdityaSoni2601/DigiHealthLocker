@@ -15,7 +15,7 @@
         android:theme="@style/Theme.DigiHealthLocker"
         tools:targetApi="31">
         <activity
-            android:name=".userregistration.RegisterUserActivity"
+            android:name=".RegisterUserActivity"
             android:theme="@style/Theme.DigiHealthLocker"
             android:exported="false" />
         <activity

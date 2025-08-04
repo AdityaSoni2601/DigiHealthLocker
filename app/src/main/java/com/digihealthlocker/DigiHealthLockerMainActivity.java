@@ -28,7 +28,11 @@ public class DigiHealthLockerMainActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            startActivity(new Intent(this, DashboardActivity.class));
+            if (currentUser.isEmailVerified()) {
+                startActivity(new Intent(this, DashboardActivity.class));
+            } else {
+                startActivity(new Intent(this, UserAuthenticationActivity.class));
+            }
         } else {
             startActivity(new Intent(this, UserAuthenticationActivity.class));
         }

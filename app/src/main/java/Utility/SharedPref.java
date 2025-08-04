@@ -67,6 +67,38 @@ public class SharedPref {
 
     // === USER PERSONAL DATA STORAGE METHODS ===
 
+    public void setUserFirstName(String firstName) {
+        getEditor().putString("user_first_name", firstName).apply();
+    }
+
+    public String getUserFirstName() {
+        return encryptedPrefs.getString("user_first_name", "");
+    }
+
+    public void setUserLastName(String lastName) {
+        getEditor().putString("user_last_name", lastName).apply();
+    }
+
+    public String getUserLastName() {
+        return encryptedPrefs.getString("user_last_name", "");
+    }
+
+    public void setUserMiddleName(String middleName) {
+        getEditor().putString("user_middle_name", middleName).apply();
+    }
+
+    public String getUserMiddleName() {
+        return encryptedPrefs.getString("user_middle_name", "");
+    }
+
+    public void setIsEmailVerified(boolean hasVerifiedGmail) {
+        getEditor().putBoolean("is_verified_email", hasVerifiedGmail).apply();
+    }
+
+    public boolean getHasUserVerifiedGmail() {
+        return encryptedPrefs.getBoolean("is_verified_email", false);
+    }
+
     /**
      * Store user email securely
      */
@@ -152,6 +184,7 @@ public class SharedPref {
     public float getFloat(String key, float defaultValue) {
         return encryptedPrefs.getFloat(key, defaultValue);
     }
+
 
     // === UTILITY METHODS ===
 

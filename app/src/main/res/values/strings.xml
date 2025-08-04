@@ -48,4 +48,10 @@
     <string name="feature_complete_privacy">• Complete Privacy</string>
     <string name="feature_your_data_your_control">• Full Control</string>
     <string name="feature_your_health_wallet">• Your Health Wallet</string>
+    <string name="email_verification_message">A verification link has been sent to your email. Please click it to verify.</string>
+    <string name="email_verification_title">Verify your email</string>
+    <string name="didn_t_receive_email">Didn\'t receive email?</string>
+    <string name="resend">Resend</string>
+    <string name="i_ve_verified">I’ve Verified</string>
+    <string name="update_user_details">Update User Details</string>
 </resources>
