@@ -1,23 +1,32 @@
 [versions]
-agp = "8.7.3"
+agp = "8.12.0"
+biometric = "1.1.0"
 credentials = "1.6.0-alpha04"
-firebaseBom = "33.16.0"
+credentialsPlayServicesAuth = "1.5.0"
+credentialsVersion = "1.5.0"
+firebaseBom = "34.1.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
 annotation = "1.9.1"
-lifecycleLivedataKtx = "2.9.0"
-lifecycleViewmodelKtx = "2.9.0"
-lottieVersion = "6.4.0"
+lifecycleLivedataKtx = "2.9.2"
+lifecycleViewmodelKtx = "2.9.2"
+lottieVersion = "6.6.7"
+playServicesAuth = "21.4.0"
+playServicesLocation = "21.3.0"
+securityCrypto = "1.1.0"
 sunJavaxMail = "1.6.2"
 
 [libraries]
+biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+credentials-play-services-auth-v120alpha02 = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
+credentials-v120alpha02 = { module = "androidx.credentials:credentials", version.ref = "credentialsVersion" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieVersion" }
@@ -31,6 +40,9 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 sun-javax-mail = { module = "com.sun.mail:javax.mail", version.ref = "sunJavaxMail" }
 
 [plugins]

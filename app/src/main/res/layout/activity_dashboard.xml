@@ -7,4 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".DashboardActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello"
+        android:id="@+id/hello"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logoutBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:textAllCaps="false"
+        android:text="Logout"
+        app:icon="@drawable/create_account_icon"
+        app:iconTint="#518085"
+        app:iconSize="18dp"
+        android:textColor="#518085"
+        app:cornerRadius="28dp"
+        app:strokeColor="#518085"
+        android:backgroundTint="#E8EAF6"
+        android:textSize="18sp"
+        app:strokeWidth="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hello"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

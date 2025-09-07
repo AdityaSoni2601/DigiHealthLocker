@@ -6,6 +6,8 @@
     </style>
 
     <style name="Theme.DigiHealthLocker" parent="Base.Theme.DigiHealthLocker">
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/app_logo_big</item>
+        <item name="android:windowSplashScreenBackground">@color/white</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -23,4 +25,11 @@
         <!-- Enable layout stable flag for better control -->
         <item name="android:fitsSystemWindows">false</item>
     </style>
+
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Force black hint always -->
+        <item name="hintTextColor">@color/black</item>
+        <item name="boxStrokeColor">@android:color/darker_gray</item>
+    </style>
+
 </resources>
