@@ -1,6 +1,7 @@
 // VerifyEmailBottomSheet.java
 package com.digihealthlocker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -35,12 +36,20 @@ public class VerifyEmailBottomSheet extends BottomSheetDialogFragment {
     private TextView timerText;
     private CountDownTimer countDownTimer;
     Button resendBtn;
-    public VerifyEmailBottomSheet(RegisterUserActivity.UserEmailVerificationResult callback) {
+    Bundle data;
+    Context mContext;
+    public VerifyEmailBottomSheet(Bundle dataBundle, RegisterUserActivity.UserEmailVerificationResult callback) {
         this.callback = callback;
+        this.data = dataBundle;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mContext = getContext();
+        if(mContext == null) {
+            Log.e("Digihealthlocker :: VerifyEmailBottomSheet", "Context is null");
+            return null;
+        }
         View view = inflater.inflate(R.layout.fragment_email_verification_sheet, container, false);
 
         mAuth = FirebaseAuth.getInstance();
@@ -69,7 +78,9 @@ public class VerifyEmailBottomSheet extends BottomSheetDialogFragment {
         });
 
         updateDetailsBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), RegisterUserActivity.class));
+            Intent intent = new Intent(mContext, RegisterUserActivity.class);
+            intent.putExtras(data);
+            startActivity(intent);
         });
 
         return view;

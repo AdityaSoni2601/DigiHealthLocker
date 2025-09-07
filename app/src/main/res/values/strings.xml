@@ -11,6 +11,8 @@
     <string name="login_failed">"Login failed"</string>
     <string name="continue_with_phone">Continue with Phone</string>
     <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_word">Continue</string>
+    <string name="not_now">Not now</string>
     <string name="app_slogan">Your Health. Your Records. Anytime. Anywhere.</string>
     <string name="welcome_message">Welcome to DigiHealthLocker</string>
     <string name="login">Sign in</string>
@@ -51,7 +53,16 @@
     <string name="email_verification_message">A verification link has been sent to your email. Please click it to verify.</string>
     <string name="email_verification_title">Verify your email</string>
     <string name="didn_t_receive_email">Didn\'t receive email?</string>
+    <string name="didn_t_receive_verification_code">Didn\'t Verification Code?</string>
     <string name="resend">Resend</string>
+    <string name="phone_verification_title">Verify your Phone Number</string>
+    <string name="create_passkey_title">Create a passkey to sign in to DigiHealthLocker?</string>
+    <string name="create_passkey_digihealthlocker">Create a passkey for DigiHealthLocker?</string>
+    <string name="create_passkey_message">This passkey will be saved to Google Password Manager for ${username}$. You can use it on other devices, and your screen lock will be used to encrypt your data.</string>
+    <string name="phone_number_verification_message">A verification code has been sent to your phone number. Please enter it below to verify phone number</string>
     <string name="i_ve_verified">I’ve Verified</string>
     <string name="update_user_details">Update User Details</string>
+    <string name="google_password_manager">Google Password Manager</string>
+    <string name="use_screen_lock">Use your screen lock</string>
+    <string name="touch_fingerprint">Touch the fingerprint sensor</string>
 </resources>

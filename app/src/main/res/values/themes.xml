@@ -6,6 +6,8 @@
     </style>
 
     <style name="Theme.DigiHealthLocker" parent="Base.Theme.DigiHealthLocker">
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/app_logo_big</item>
+        <item name="android:windowSplashScreenBackground">@color/white</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

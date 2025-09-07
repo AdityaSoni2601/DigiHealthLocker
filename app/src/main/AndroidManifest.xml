@@ -3,25 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
 
+<!--    android:icon="@mipmap/app_logo_super_big_foreground"-->
+<!--    android:roundIcon="@mipmap/app_logo_super_big_foreground"-->
+
     <application
         android:name=".DigiHealthLockerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/app_logo_super_big_foreground"
+        android:icon="@mipmap/app_logo_big"
+        android:roundIcon="@mipmap/app_logo_big"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/app_logo_super_big_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.DigiHealthLocker"
         tools:targetApi="31">
         <activity
             android:name=".RegisterUserActivity"
+            android:exported="false"
             android:theme="@style/Theme.DigiHealthLocker"
-            android:exported="false" />
+            />
         <activity
             android:name=".LoginUserActivity"
+            android:exported="false"
             android:theme="@style/Theme.DigiHealthLocker"
-            android:exported="false" />
+            />
         <activity
             android:name=".UserAuthenticationActivity"
             android:exported="false"
@@ -32,7 +37,8 @@
             android:theme="@style/Theme.DigiHealthLocker" />
         <activity
             android:name=".SplashScreenActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.DigiHealthLocker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

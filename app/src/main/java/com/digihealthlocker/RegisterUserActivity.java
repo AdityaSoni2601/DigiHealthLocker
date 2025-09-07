@@ -17,18 +17,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
+
+import java.util.concurrent.TimeUnit;
 
 import Utility.AppHandler;
 import Utility.SharedPref;
 import Utility.Util;
+import Utility.AppConstants;
 
 public class RegisterUserActivity extends AppCompatActivity {
     public interface UserRegistrationResult {
@@ -39,11 +48,17 @@ public class RegisterUserActivity extends AppCompatActivity {
         void onEmailVerificationResult(boolean result);
     }
 
+    public interface UserPhoneVerificationResult {
+        void onPhoneVerificationResult(boolean result);
+    }
+
+    PhoneAuthProvider.ForceResendingToken mResendtoken = null;
+
     private LinearLayout keywordsSet1, keywordsSet2, keywordsSet3;
     private AppHandler animationHandler;
     private Runnable animationRunnable;
     private int currentSet = 0;
-    private TextInputEditText userFirstName, userMiddleName, userLastName, userPhoneOrEmail, userPassword, userConfirmPassword;
+    private TextInputEditText userFirstName, userMiddleName, userLastName, userPhoneOrEmail, userNewPassword, userConfirmNewPassword;
     private MaterialButton signUpButton;
     FirebaseAuth mAuth;
     private static final String KEY_FIRST_NAME = "first_name";
@@ -52,6 +67,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     private static final String KEY_EMAIL_OR_PHONE = "email_or_phone";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_CONFIRM_PASSWORD = "confirm_password";
+    private String mVerificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +75,8 @@ public class RegisterUserActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register_user);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register_user_activity), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Insets navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            v.setPadding(0, 0, 0, navBarInsets.bottom);
             return insets;
         });
 
@@ -68,13 +84,19 @@ public class RegisterUserActivity extends AppCompatActivity {
         userMiddleName = findViewById(R.id.userMiddleName);
         userLastName = findViewById(R.id.userLastName);
         userPhoneOrEmail = findViewById(R.id.userPhoneOrEmail);
-        userPassword = findViewById(R.id.userNewPassword);
-        userConfirmPassword = findViewById(R.id.userConfirmNewPassword);
+        userNewPassword = findViewById(R.id.userNewPassword);
+        userConfirmNewPassword = findViewById(R.id.userConfirmNewPassword);
         signUpButton = findViewById(R.id.completeSignUpButton);
 
         mAuth = FirebaseAuth.getInstance();
 
-        updateFields(savedInstanceState);
+
+        Bundle userDataBundle = getIntent().getExtras();
+        if(userDataBundle != null) {
+            updateFields(userDataBundle);
+        } else if(savedInstanceState != null) {
+            updateFields(savedInstanceState);
+        }
     }
 
     @Override
@@ -87,8 +109,8 @@ public class RegisterUserActivity extends AppCompatActivity {
             String middleName = String.valueOf(userMiddleName.getText()).trim();
             String lastName = String.valueOf(userLastName.getText()).trim();
             String emailOrPhone = String.valueOf(userPhoneOrEmail.getText()).trim();
-            String newPassword = String.valueOf(userPassword.getText()).trim();
-            String confirmNewPassword = String.valueOf(userConfirmPassword.getText()).trim();
+            String newPassword = String.valueOf(userNewPassword.getText()).trim();
+            String confirmNewPassword = String.valueOf(userConfirmNewPassword.getText()).trim();
 
             if(Util.isNullOrEmpty(firstName)) {
                 Util.makeToast(RegisterUserActivity.this, "First name field cannot be empty!", 1);
@@ -109,11 +131,19 @@ public class RegisterUserActivity extends AppCompatActivity {
                 Util.makeToast(RegisterUserActivity.this, "Please enter valid Gmail ID or Phone Number!", 1);
             }
 
+            Bundle dataBundle = new Bundle();
+            dataBundle.putString(AppConstants.USER_FIRST_NAME_KEY, firstName);
+            dataBundle.putString(AppConstants.USER_MIDDLE_NAME_KEY, middleName);
+            dataBundle.putString(AppConstants.USER_LAST_NAME_KEY, lastName);
+            dataBundle.putString(AppConstants.USER_PHONE_OR_EMAIL_KEY, emailOrPhone);
+            dataBundle.putString(AppConstants.USER_PASSWORD_KEY, newPassword);
+            dataBundle.putString(AppConstants.USER_CONFIRM_PASSWORD_KEY, confirmNewPassword);
+
             if(isValidGmail) {
                 createUserWithEmail(emailOrPhone, newPassword, new UserRegistrationResult() {
                     @Override
                     public void onUserRegisteredAwaitingVerification() {
-                        VerifyEmailBottomSheet sheet = new VerifyEmailBottomSheet(new UserEmailVerificationResult() {
+                        VerifyEmailBottomSheet sheet = new VerifyEmailBottomSheet(dataBundle, new UserEmailVerificationResult() {
                             @Override
                             public void onEmailVerificationResult(boolean result) {
                                 if(result) {
@@ -125,7 +155,8 @@ public class RegisterUserActivity extends AppCompatActivity {
                                         SharedPref.getInstance().setUserMiddleName(lastName);
                                     }
                                     SharedPref.getInstance().setUserEmail(emailOrPhone);
-                                    startActivity(new Intent(RegisterUserActivity.this, DashboardActivity.class));
+                                    AskPassKeyCreationBottomSheet askPassKeyCreationBottomSheet = new AskPassKeyCreationBottomSheet();
+                                    askPassKeyCreationBottomSheet.show(getSupportFragmentManager(), "AskPassKeyCreationBottomSheet");
                                 }
                             }
                         });
@@ -134,7 +165,36 @@ public class RegisterUserActivity extends AppCompatActivity {
                 });
 
             } else {
-                createUserWithPhone(emailOrPhone, newPassword);
+                String phoneNumber = "+91".concat(emailOrPhone);
+                createUserWithPhone(phoneNumber, newPassword, new UserRegistrationResult() {
+                    @Override
+                    public void onUserRegisteredAwaitingVerification() {
+                        // This callback is triggered after the OTP is sent.
+                        // Now, show a bottom sheet or dialog to get the OTP from the user.
+                        // We pass the mVerificationId to the sheet so it can verify the OTP.
+                        VerifyPhoneBottomSheet sheet = new VerifyPhoneBottomSheet(mVerificationId, mResendtoken, dataBundle, new UserPhoneVerificationResult() {
+                            @Override
+                            public void onPhoneVerificationResult(boolean result) {
+                                if (result) {
+                                    // This logic runs upon successful phone verification
+                                    SharedPref.getInstance().setUserFirstName(firstName);
+                                    if (!Util.isNullOrEmpty(middleName)) {
+                                        SharedPref.getInstance().setUserMiddleName(middleName);
+                                    }
+                                    if (!Util.isNullOrEmpty(lastName)) {
+                                        // NOTE: Corrected a bug from the original snippet.
+                                        // The original used setUserMiddleName for the last name.
+                                        SharedPref.getInstance().setUserLastName(lastName);
+                                    }
+                                    SharedPref.getInstance().setUserPhone(emailOrPhone);
+                                    startActivity(new Intent(RegisterUserActivity.this, DashboardActivity.class));
+                                    finish();
+                                }
+                            }
+                        });
+                        sheet.show(getSupportFragmentManager(), "VerifyPhoneOtpBottomSheet");
+                    }
+                });
             }
         });
 
@@ -142,27 +202,25 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private void updateFields(Bundle savedInstanceState) {
         if (savedInstanceState == null) return;
-
-        userFirstName.setText(savedInstanceState.getString(KEY_FIRST_NAME, ""));
-        userMiddleName.setText(savedInstanceState.getString(KEY_MIDDLE_NAME, ""));
-        userLastName.setText(savedInstanceState.getString(KEY_LAST_NAME, ""));
-        userPhoneOrEmail.setText(savedInstanceState.getString(KEY_EMAIL_OR_PHONE, ""));
-        userPassword.setText(savedInstanceState.getString(KEY_PASSWORD, ""));
-        userConfirmPassword.setText(savedInstanceState.getString(KEY_CONFIRM_PASSWORD, ""));
+        userFirstName.setText(savedInstanceState.getString(AppConstants.USER_FIRST_NAME_KEY, ""));
+        userMiddleName.setText(savedInstanceState.getString(AppConstants.USER_MIDDLE_NAME_KEY, ""));
+        userLastName.setText(savedInstanceState.getString(AppConstants.USER_LAST_NAME_KEY, ""));
+        userPhoneOrEmail.setText(savedInstanceState.getString(AppConstants.USER_PHONE_OR_EMAIL_KEY, ""));
+        userNewPassword.setText(savedInstanceState.getString(AppConstants.USER_PASSWORD_KEY, ""));
+        userConfirmNewPassword.setText(savedInstanceState.getString(AppConstants.USER_CONFIRM_PASSWORD_KEY, ""));
     }
 
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_FIRST_NAME, userFirstName.getText().toString());
-        outState.putString(KEY_MIDDLE_NAME, userMiddleName.getText().toString());
-        outState.putString(KEY_LAST_NAME, userLastName.getText().toString());
-        outState.putString(KEY_EMAIL_OR_PHONE, userPhoneOrEmail.getText().toString());
-        outState.putString(KEY_PASSWORD, userPassword.getText().toString());
-        outState.putString(KEY_CONFIRM_PASSWORD, userConfirmPassword.getText().toString());
+        outState.putString(AppConstants.USER_FIRST_NAME_KEY, String.valueOf(userFirstName.getText()));
+        outState.putString(AppConstants.USER_MIDDLE_NAME_KEY, String.valueOf(userMiddleName.getText()));
+        outState.putString(AppConstants.USER_LAST_NAME_KEY, String.valueOf(userLastName.getText()));
+        outState.putString(AppConstants.USER_PHONE_OR_EMAIL_KEY, String.valueOf(userPhoneOrEmail.getText()));
+        outState.putString(AppConstants.USER_PASSWORD_KEY, String.valueOf(userNewPassword.getText()));
+        outState.putString(AppConstants.USER_CONFIRM_PASSWORD_KEY, String.valueOf(userConfirmNewPassword.getText()));
     }
-
 
 
     private void initializeKeywordAnimation() {
@@ -279,8 +337,77 @@ public class RegisterUserActivity extends AppCompatActivity {
     }
 
 
-    private void createUserWithPhone(String phoneNumber, String password) {
+    private void createUserWithPhone(String phoneNumber, String password, UserRegistrationResult callback) {
+        PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                // The SMS verification code has been sent to the provided phone number.
+                // We save the verification ID and token to use later.
+                Log.d("FirebaseSuccess", "onCodeSent:" + verificationId);
+                mVerificationId = verificationId;
+                mResendtoken = token;
+                // Trigger the UI to ask the user for the OTP.
 
+                callback.onUserRegisteredAwaitingVerification();
+            }
+
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
+                // This callback is invoked in two situations:
+                // 1. Instant verification without user action.
+                // 2. Auto-retrieval of the SMS code on some devices.
+                Log.d("FirebaseSuccess", "onVerificationCompleted:" + credential);
+                signInWithPhoneAuthCredential(credential); // Directly sign in the user
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                // This callback is invoked for invalid requests or other errors.
+                Log.w("FirebaseError", "onVerificationFailed", e);
+                String errorMessage = e.getMessage();
+                if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                    errorMessage = "Invalid phone number format.";
+                }
+                Util.makeToast(RegisterUserActivity.this, "Error: " + errorMessage, 1);
+            }
+        };
+
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                        .setPhoneNumber(phoneNumber)       // Phone number to verify
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(this)                 // Activity (for callbacks)
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+
+    /**
+     * Signs in the user with the given PhoneAuthCredential.
+     * This can be called either on auto-retrieval (onVerificationCompleted) or after
+     * the user manually enters the OTP.
+     * @param credential The credential from Firebase.
+     */
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FirebaseSuccess", "User signed in successfully.");
+
+                    } else {
+                        Exception exception = task.getException();
+                        Log.w("FirebaseError", "signInWithCredential:failure", exception);
+                        String errorMessage = "Authentication failed.";
+                        if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                            errorMessage = "The verification code is invalid.";
+                        }
+                        Util.makeToast(RegisterUserActivity.this, "Error: " + errorMessage, 1);
+                    }
+                });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override

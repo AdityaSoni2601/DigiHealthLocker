@@ -5,4 +5,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="your_brand_primary_text_color">#FFFFFF</color> <color name="your_brand_secondary_text_color">#E0E0E0</color>
     <color name="your_splash_background_color">#2196F3</color> <color name="your_brand_accent">#FFC107</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

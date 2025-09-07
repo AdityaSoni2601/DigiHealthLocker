@@ -21,11 +21,11 @@
 
         <!-- Title -->
         <TextView
-            android:id="@+id/verifyEmailTitle"
+            android:id="@+id/verifyPhoneTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/email_verification_title"
+            android:text="@string/phone_verification_title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,21 +35,99 @@
 
         <!-- Message -->
         <TextView
-            android:id="@+id/verifyEmailMessage"
+            android:id="@+id/verifyPhoneMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="@string/email_verification_message"
+            android:text="@string/phone_number_verification_message"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/verifyEmailTitle"
+            app:layout_constraintTop_toBottomOf="@id/verifyPhoneTitle"
             />
 
+        <!-- OTP Code Input -->
         <LinearLayout
-            android:id="@+id/resendEmailLayout"
+            android:id="@+id/otpContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <!-- Repeat this EditText for each digit -->
+            <EditText
+                android:id="@+id/otpDigit1"
+                android:layout_width="36dp"
+                android:layout_height="44dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp"
+                android:background="@drawable/otp_box_background" />
+
+            <EditText
+                android:id="@+id/otpDigit2"
+                android:layout_width="36dp"
+                android:layout_height="44dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp"
+                android:background="@drawable/otp_box_background" />
+
+            <EditText
+                android:id="@+id/otpDigit3"
+                android:layout_width="36dp"
+                android:layout_height="44dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp"
+                android:background="@drawable/otp_box_background" />
+
+            <EditText
+                android:id="@+id/otpDigit4"
+                android:layout_width="36dp"
+                android:layout_height="44dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp"
+                android:background="@drawable/otp_box_background" />
+
+            <EditText
+                android:id="@+id/otpDigit5"
+                android:layout_width="36dp"
+                android:layout_height="44dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp"
+                android:background="@drawable/otp_box_background" />
+
+            <EditText
+                android:id="@+id/otpDigit6"
+                android:layout_width="36dp"
+                android:layout_height="44dp"
+                android:layout_margin="4dp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp"
+                android:background="@drawable/otp_box_background" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/resendVerificationCodeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -60,10 +138,10 @@
             >
 
             <TextView
-                android:id="@+id/didntReceiveEmailMessage"
+                android:id="@+id/didntReceiveVerificationCodeMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/didn_t_receive_email"
+                android:text="@string/didn_t_receive_verification_code"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +161,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/didntReceiveEmailMessage"/>
+                app:layout_constraintTop_toBottomOf="@id/didntReceiveVerificationCodeMessage"/>
 
             <TextView
                 android:id="@+id/timerText"
@@ -115,6 +193,6 @@
             app:strokeWidth="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/resendEmailLayout"/>
+            app:layout_constraintTop_toBottomOf="@id/resendVerificationCodeLayout"/>
     </LinearLayout>
 </FrameLayout>

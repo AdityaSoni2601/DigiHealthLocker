@@ -48,7 +48,7 @@
         android:textAlignment="center"
         android:textColor="#222222"
         android:textSize="24sp"
-        android:textFontWeight="900"
+        android:textFontWeight="600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
